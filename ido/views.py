@@ -1,26 +1,25 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse,HttpResponseRedirect
 from django.urls import reverse
-from .models import Survey
-from django.utils import timezone
+from .models import liveData,memberData,historicalRecord,covidRecord
+from rest_framework import viewsets
+from .serializers import liveDataSerializer,covidRecordSerializer,memberDataSerializer,historicalRecordSerializer
+
 
 # Create your views here.
 
-def home(request):
-    return render(request, 'home.html')
+class liveDataViewset(viewsets.ModelViewSet):
+    queryset = liveData.objects.all()
+    serializer_class = liveDataSerializer
 
-def new(request):
-    return render(request, 'new.html')
+class memberDataViewset(viewsets.ModelViewSet):
+    queryset = memberData.objects.all()
+    serializer_class = memberDataSerializer
 
-def create(request):
-    survey = Survey()
+class historicalRecordViewset(viewsets.ModelViewSet):
+    queryset = historicalRecord.objects.all()
+    serializer_class = historicalRecordSerializer
 
-    survey.name = request.GET['name']
-    survey.major = request.GET['major']
-    survey.phone_num = request.GET['phone_num']
-    survey.body_temp = request.GET['body_temp']
-    survey.agree_check = request.GET['chk_info']
-    survey.update_time = timezone.datetime.now()
-
-    survey.save()
-    return HttpResponseRedirect(reverse('new'))
+class covidRecordViewset(viewsets.ModelViewSet):
+    queryset = covidRecord.objects.all()
+    serializer_class = covidRecordSerializer

@@ -15,11 +15,18 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-import ido.views 
+from rest_framework import routers
+from django.conf.urls import url, include
+from ido.views import memberDataViewset,covidRecordViewset,liveDataViewset,historicalRecordViewset
+
+router = routers.DefaultRouter()
+router.register('liveData',liveDataViewset)
+router.register('historicalRecord',historicalRecordViewset)
+router.register('memberData',memberDataViewset)
+router.register('covidRecord',covidRecordViewset)
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('',ido.views.home, name='home'),
-    path('new/',ido.views.new, name='new'),
-    path('create/', ido.views.create, name='create'),
+    path('admin/', admin.site.urls,),
+    url(r'^',include(router.urls)),
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 ]
